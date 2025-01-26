@@ -37,7 +37,7 @@ void CreateIndexFile(const char* filename, int numberOfRecords, int m) {
 }
 
 // Function to read a node from the text file
-Node ReadNodeFromFile(ifstream& file) {
+Node ReadNodeFromFile(fstream& file) {
     Node node;
     string line;
     if (getline(file, line)) {
@@ -54,7 +54,7 @@ Node ReadNodeFromFile(ifstream& file) {
 }
 
 // Function to write a node to the text file
-void WriteNodeToFile(ofstream& file, const Node& node) {
+void WriteNodeToFile(fstream& file, const Node& node) {
     file << node.isLeaf << " " << node.nextFreeNode << " ";
     for (int i = 0; i < 5; ++i) {
         file << node.keys[i] << " ";
@@ -80,7 +80,7 @@ int InsertNewRecordAtIndex(const char* filename, int RecordID, int Reference) {
         root.isLeaf = 0;
         root.keys[0] = RecordID;
         root.references[0] = Reference;
-        file.seekp(0, ios::beg);
+        file.seekp(0, ios::beg); // Move the file pointer to the beginning
         WriteNodeToFile(file, root);
         file.close();
         return 1; // Return the index of the root node
@@ -129,7 +129,7 @@ void DisplayIndexFileContent(const char* filename) {
 
 // Function to search for a record in the index file
 int SearchARecord(const char* filename, int RecordID) {
-    ifstream file(filename);
+    fstream file(filename, ios::in);
     if (!file) {
         cerr << "Error opening file!" << endl;
         return -1;
